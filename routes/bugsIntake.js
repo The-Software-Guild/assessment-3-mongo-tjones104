@@ -45,7 +45,7 @@ router.post("/bugsIntake", (req, res, next) => {
   bug
     .save()
     .then((result) => {
-      res.status(200).send(result);
+      res.status(201).send(result);
     })
     .catch((err) => {
       next(new Error("Incorrect number of properties"));
@@ -56,7 +56,7 @@ router.post("/bugsIntake", (req, res, next) => {
 router.put("/bugsIntake/:id", (req, res, next) => {
   Bug.findByIdAndUpdate(req.params.id, req.body)
     .then((result) => {
-      res.status(200).send(result);
+      res.status(201).send(result);
     })
     .catch((err) => {
       next(new Error("This id was not found"));
@@ -67,7 +67,7 @@ router.put("/bugsIntake/:id", (req, res, next) => {
 router.delete("/bugsIntake/:id", (req, res, next) => {
   Bug.findByIdAndDelete(req.params.id)
     .then((result) => {
-      res.status(200).send(result);
+      res.status(201).send(result);
     })
     .catch((err) => {
       next(new Error("This id was not found"));

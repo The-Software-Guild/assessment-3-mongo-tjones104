@@ -74,8 +74,4 @@ router.delete("/bugsIntake/:id", (req, res, next) => {
     });
 });
 
-// router.get("*", (req, res, next) => {
-//   next(new Error("This route was not found"));
-// });
-
 module.exports = router;

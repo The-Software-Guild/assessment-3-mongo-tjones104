@@ -3,11 +3,11 @@ import axios from "axios";
 import DeleteBugs from "./deleteBugs";
 import PutBugs from "./putBugs";
 import Modal from "./modal";
+import withRouter from "./withRouter";
 
 class GetBugs extends Component {
   constructor() {
     super();
-
     let today = new Date(),
       date =
         today.getMonth() +
@@ -54,15 +54,38 @@ class GetBugs extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:8080/api/bugsIntake")
-      .then((res) => {
-        const bugs = res.data;
-        this.setState({ bugs });
-      })
-      .catch((error) => {
-        alert("Error: Could not fetch");
-      });
+    if (this.props.params.id) {
+      axios
+        .get("http://localhost:8080/api/bugsIntake/" + this.props.params.id)
+        .then((res) => {
+          const bugs = [];
+          bugs.push(res.data);
+          this.setState({ bugs });
+        })
+        .catch((error) => {
+          alert("Error: Could not fetch");
+        });
+    } else if (this.props.search) {
+      axios
+        .get("http://localhost:8080/api/bugsIntake" + this.props.search)
+        .then((res) => {
+          const bugs = res.data;
+          this.setState({ bugs });
+        })
+        .catch((error) => {
+          alert("Error: Could not fetch query");
+        });
+    } else {
+      axios
+        .get("http://localhost:8080/api/bugsIntake")
+        .then((res) => {
+          const bugs = res.data;
+          this.setState({ bugs });
+        })
+        .catch((error) => {
+          alert("Error: Could not fetch");
+        });
+    }
   }
 
   handleSubmit = (e) => {
@@ -197,4 +220,4 @@ class GetBugs extends Component {
   }
 }
 
-export default GetBugs;
+export default withRouter(GetBugs);

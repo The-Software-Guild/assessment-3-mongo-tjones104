@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import CryptoJS from "crypto-js";
 
 class Login extends Component {
   constructor(props) {
@@ -21,22 +22,24 @@ class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .get(
-        "http://localhost:8080/api/usersIntake?email=" +
-          this.state.email +
-          "&password=" +
-          this.state.password
-      )
+      .get("http://localhost:8080/api/usersIntake?email=" + this.state.email)
       .then((res) => {
         const user = res.data;
-        alert("Success: User Logged in, redirecting to home");
-        this.props.user(user[0]);
-        this.props.login();
-        this.setState({ redirect: true });
+        // Decrypt password
+        const bytes = CryptoJS.AES.decrypt(user[0].password, "4356");
+        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+        if (originalText === this.state.password) {
+          alert("Success: User Logged in, redirecting to home");
+          this.props.user(user[0]);
+          this.props.login();
+          this.setState({ redirect: true });
+        } else {
+          alert("Error: Incorrect Password");
+        }
       })
       .catch((error) => {
         console.log(error);
-        alert("Error: Incorrect Credentials");
+        alert("Error: Invalid email and password combo");
       });
   };
 

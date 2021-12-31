@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import CryptoJS from "crypto-js";
 
 class Register extends Component {
   constructor() {
@@ -22,8 +23,17 @@ class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+
+    // Encrypt password
+    const ciphertext = CryptoJS.AES.encrypt(
+      this.state.password,
+      "4356"
+    ).toString();
+
+    const data = this.state;
+    data.password = ciphertext;
     axios
-      .post("http://localhost:8080/api/usersIntake", this.state)
+      .post("http://localhost:8080/api/usersIntake", data)
       .then((res) => {
         alert("Succuss: User Registered, redirecting to Login");
         this.setState({ redirect: true });

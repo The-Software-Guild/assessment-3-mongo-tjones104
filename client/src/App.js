@@ -21,7 +21,6 @@ class App extends Component {
     }
 
     const data = JSON.parse(localStorage.getItem("state"));
-    console.log(data);
     if (data.LoggedIn === true) {
       this.setState({ LoggedIn: data.LoggedIn, user: data.user });
     }

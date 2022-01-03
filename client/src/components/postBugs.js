@@ -9,12 +9,12 @@ class PostBugs extends Component {
     // System date and time
     let today = new Date(),
       date =
-        today.getMonth() +
+        today.getFullYear() +
+        "-" +
+        today.getMonth().toString().padStart(1, "0") +
         1 +
-        "/" +
-        today.getDate() +
-        "/" +
-        today.getFullYear(),
+        "-" +
+        today.getDate().toString().padStart(2, "0"),
       time =
         today.getHours().toString().padStart(2, "0") +
         ":" +
@@ -75,9 +75,9 @@ class PostBugs extends Component {
             required
           />
           <label>Time:</label>
-          <input type="text" name="time" value={this.state.time} disabled />
+          <input type="time" name="time" value={this.state.time} disabled />
           <label>Date:</label>
-          <input type="text" name="date" value={this.state.date} disabled />
+          <input type="date" name="date" value={this.state.date} disabled />
           <label>Assignee:</label>
           <input
             type="text"

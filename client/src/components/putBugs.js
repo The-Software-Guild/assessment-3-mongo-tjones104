@@ -61,7 +61,7 @@ class PutBugs extends Component {
             />
             <label>Time:</label>
             <input
-              type="text"
+              type="time"
               name="time"
               value={this.state.time}
               onChange={this.handleChange}
@@ -69,7 +69,7 @@ class PutBugs extends Component {
             />
             <label>Date:</label>
             <input
-              type="text"
+              type="date"
               name="date"
               value={this.state.date}
               onChange={this.handleChange}

@@ -37,7 +37,7 @@ router.post("/usersIntake", (req, res, next) => {
       res.status(200).send(result);
     })
     .catch((err) => {
-      next(new Error("Incorrect number of properties"));
+      next(new Error("Incorrect number of properties or User already exists"));
     });
 });
 

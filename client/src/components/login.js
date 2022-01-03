@@ -38,7 +38,6 @@ class Login extends Component {
         }
       })
       .catch((error) => {
-        console.log(error);
         alert("Error: Invalid email and password combo");
       });
   };

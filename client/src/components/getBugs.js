@@ -10,12 +10,12 @@ class GetBugs extends Component {
     super();
     let today = new Date(),
       date =
-        today.getMonth() +
+        today.getFullYear() +
+        "-" +
+        today.getMonth().toString().padStart(1, "0") +
         1 +
-        "/" +
-        (today.getDate() - 3) +
-        "/" +
-        today.getFullYear(),
+        "-" +
+        (today.getDate() - 3).toString().padStart(2, "0"),
       time =
         today.getHours().toString().padStart(2, "0") +
         ":" +
@@ -177,9 +177,18 @@ class GetBugs extends Component {
                 <td>{items.date}</td>
                 <td>{items.assignee}</td>
                 <td>{items._id}</td>
-                <td>
-                  {items.date.slice(3, 5) - this.state.deadlineDate.slice(3, 5)}
-                </td>
+                {items.date.slice(0, 4) !== "2022" ? (
+                  <td>
+                    {items.date.slice(8, 10) -
+                      31 -
+                      this.state.deadlineDate.slice(8, 10)}
+                  </td>
+                ) : (
+                  <td>
+                    {items.date.slice(8, 10) -
+                      this.state.deadlineDate.slice(8, 10)}
+                  </td>
+                )}
                 <td>
                   <button
                     className="edit-button"

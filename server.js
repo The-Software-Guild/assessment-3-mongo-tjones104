@@ -1,21 +1,20 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const mongoose = require("mongoose");
+const router = express.Router();
+const routes = require("./routes/index");
 
 // express app
 const app = express();
 
-// connect to database
-const URI =
-  "mongodb+srv://tjones104:4356@labs.nl69h.mongodb.net/mern_bug_tracker?retryWrites=true&w=majority";
-mongoose
-  .connect(URI)
-  .then((result) => console.log("Connected to the database"))
-  .catch((err) => console.log(err));
+const environment = process.env.NODE_ENV; // development
+const stage = require("./config")[environment];
 
-// constants
-const PORT = 8080;
+// logger
+if (environment !== "production") {
+  app.use(morgan("dev"));
+}
 
 // application level middleware
 app.use(
@@ -27,12 +26,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// logger
-app.use(morgan("dev"));
-
 // route initialize
-app.use("/api", require("./routes/bugsIntake"));
-app.use("/api", require("./routes/usersIntake"));
+app.use("/api", routes(router));
 
 // global error handler
 app.use((err, req, res, next) => {
@@ -42,6 +37,8 @@ app.use((err, req, res, next) => {
 });
 
 // server startup logic
-const server = app.listen(PORT, () => {
-  console.log(`Server started | Link: http://localhost:${PORT}/`);
+app.listen(`${stage.port}`, () => {
+  console.log(`Server started | Link: http://localhost:${stage.port}/`);
 });
+
+module.exports = app;

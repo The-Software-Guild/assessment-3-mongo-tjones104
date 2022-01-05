@@ -3,8 +3,8 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 class PostBugs extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     // System date and time
     let today = new Date(),
@@ -25,7 +25,6 @@ class PostBugs extends Component {
       description: "",
       time: time,
       date: date,
-      assignee: props.user.name,
       redirect: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,8 +37,18 @@ class PostBugs extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const data = JSON.parse(localStorage.getItem("state"));
+    const { title, description, time, date } = this.state;
     axios
-      .post("http://localhost:8080/api/bugsIntake", this.state)
+      .post(
+        "http://localhost:8080/api/bugs",
+        { title, description, time, date },
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        }
+      )
       .then((res) => {
         alert("Succuss: Item added");
         this.setState({ redirect: true });
@@ -78,13 +87,6 @@ class PostBugs extends Component {
           <input type="time" name="time" value={this.state.time} disabled />
           <label>Date:</label>
           <input type="date" name="date" value={this.state.date} disabled />
-          <label>Assignee:</label>
-          <input
-            type="text"
-            name="assignee"
-            value={this.state.assignee}
-            disabled
-          />
           <button>Post Bug</button>
         </form>
       </div>

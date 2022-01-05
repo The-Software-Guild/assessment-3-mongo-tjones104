@@ -9,7 +9,7 @@ class PutBugs extends Component {
       description: props.description,
       time: props.time,
       date: props.date,
-      assignee: props.assignee,
+      assignee: props.assignee.name,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -21,8 +21,19 @@ class PutBugs extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const data = JSON.parse(localStorage.getItem("state"));
+    const { title, description, time, date } = this.state;
+    const assignee = this.props.assignee._id;
     axios
-      .put(`http://localhost:8080/api/bugsIntake/${this.props.id}`, this.state)
+      .put(
+        `http://localhost:8080/api/bugs/${this.props.id}`,
+        { title, description, time, date, assignee },
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        }
+      )
       .then((res) => {
         if (res.status === 201) {
           alert("Succuss: Item updated");
@@ -82,6 +93,7 @@ class PutBugs extends Component {
               value={this.state.assignee}
               onChange={this.handleChange}
               required
+              disabled
             />
             <button>Submit Edit</button>
           </form>

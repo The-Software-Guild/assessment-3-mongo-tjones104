@@ -54,9 +54,14 @@ class GetBugs extends Component {
   }
 
   componentDidMount() {
+    const data = JSON.parse(localStorage.getItem("state"));
     if (this.props.params.id) {
       axios
-        .get("http://localhost:8080/api/bugsIntake/" + this.props.params.id)
+        .get("http://localhost:8080/api/bugs/" + this.props.params.id, {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        })
         .then((res) => {
           const bugs = [];
           bugs.push(res.data);
@@ -67,7 +72,11 @@ class GetBugs extends Component {
         });
     } else if (this.props.search) {
       axios
-        .get("http://localhost:8080/api/bugsIntake" + this.props.search)
+        .get("http://localhost:8080/api/bugs" + this.props.search, {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        })
         .then((res) => {
           const bugs = res.data;
           this.setState({ bugs });
@@ -77,7 +86,11 @@ class GetBugs extends Component {
         });
     } else {
       axios
-        .get("http://localhost:8080/api/bugsIntake")
+        .get("http://localhost:8080/api/bugs", {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        })
         .then((res) => {
           const bugs = res.data;
           this.setState({ bugs });
@@ -89,13 +102,19 @@ class GetBugs extends Component {
   }
 
   handleSubmit = (e) => {
+    const data = JSON.parse(localStorage.getItem("state"));
     e.preventDefault();
     axios
       .get(
-        "http://localhost:8080/api/bugsIntake?" +
+        "http://localhost:8080/api/bugs?" +
           this.state.searchBy +
           "=" +
-          this.state.searchQuery
+          this.state.searchQuery,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        }
       )
       .then((res) => {
         const bugs = res.data;
@@ -175,7 +194,7 @@ class GetBugs extends Component {
                 <td>{items.description}</td>
                 <td>{items.time}</td>
                 <td>{items.date}</td>
-                <td>{items.assignee}</td>
+                <td>{items.assignee.name}</td>
                 <td>{items._id}</td>
                 {items.date.slice(0, 4) !== "2022" ? (
                   <td>

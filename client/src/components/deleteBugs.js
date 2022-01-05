@@ -4,8 +4,13 @@ import axios from "axios";
 class DeleteBugs extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
+    const data = JSON.parse(localStorage.getItem("state"));
     axios
-      .delete(`http://localhost:8080/api/bugsIntake/${this.props.id}`)
+      .delete(`http://localhost:8080/api/bugs/${this.props.id}`, {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      })
       .then((res) => {
         if (res.status === 201) {
           alert("Succuss: Item deleted");
